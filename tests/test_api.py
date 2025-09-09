@@ -12,6 +12,7 @@ class TestHeadHunterAPI(unittest.TestCase):
     def test_get_vacancies_success(self, mock_get):
         # Мокируем успешный ответ
         mock_response = Mock()
+        mock_response.status_code = 200
         mock_response.json.return_value = {
             "items": [
                 {
@@ -24,7 +25,6 @@ class TestHeadHunterAPI(unittest.TestCase):
                 }
             ]
         }
-        mock_response.raise_for_status.return_value = None
         mock_get.return_value = mock_response
 
         vacancies = self.api.get_vacancies("Python")
@@ -33,10 +33,20 @@ class TestHeadHunterAPI(unittest.TestCase):
         self.assertEqual(vacancies[0]["name"], "Python Developer")
 
     @patch("src.api.requests.get")
+    def test_get_vacancies_error_status(self, mock_get):
+        # Мокируем ответ с ошибкой
+        mock_response = Mock()
+        mock_response.status_code = 404
+        mock_get.return_value = mock_response
+
+        with self.assertRaises(ConnectionError):
+            self.api.get_vacancies("Python")
+
+    @patch("src.api.requests.get")
     def test_get_vacancies_empty(self, mock_get):
         mock_response = Mock()
+        mock_response.status_code = 200
         mock_response.json.return_value = {"items": []}
-        mock_response.raise_for_status.return_value = None
         mock_get.return_value = mock_response
 
         vacancies = self.api.get_vacancies("NonexistentQuery")

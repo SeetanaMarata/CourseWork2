@@ -34,6 +34,7 @@ class JSONSaver(Storage):
     """Класс для работы с JSON-файлом"""
 
     def __init__(self, filename: str = "vacancies.json"):
+        # Делаем атрибут защищенным (с одним подчеркиванием)
         self._filename = filename
         self._ensure_data_directory()
 

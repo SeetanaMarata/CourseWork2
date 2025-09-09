@@ -21,11 +21,15 @@ class HeadHunterAPI(API):
     def __init__(self):
         self._base_url = "https://api.hh.ru/vacancies"
 
-    def _connect_to_api(self, params: Dict[str, Any]) -> Dict[str, Any]:
+    def __connect_to_api(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Приватный метод для подключения к API"""
         try:
             response = requests.get(self._base_url, params=params)
-            response.raise_for_status()  # Проверка статус-кода
+            # Добавляем проверку статус-кода
+            if response.status_code != 200:
+                raise ConnectionError(
+                    f"Ошибка подключения к API hh.ru. Статус код: {response.status_code}"
+                )
             return response.json()
         except requests.exceptions.RequestException as e:
             raise ConnectionError(f"Ошибка подключения к API hh.ru: {e}")
@@ -41,5 +45,5 @@ class HeadHunterAPI(API):
             "only_with_salary": True,
         }
 
-        data = self._connect_to_api(params)
+        data = self.__connect_to_api(params)
         return data.get("items", [])

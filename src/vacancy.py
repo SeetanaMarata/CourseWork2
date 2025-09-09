@@ -7,14 +7,14 @@ class Vacancy:
     """Класс для работы с вакансиями"""
 
     __slots__ = (
-        "_title",
-        "_url",
-        "_salary_from",
-        "_salary_to",
-        "_currency",
-        "_description",
-        "_requirements",
-        "_employer",
+        "__title",
+        "__url",
+        "__salary_from",
+        "__salary_to",
+        "__currency",
+        "__description",
+        "__requirements",
+        "__employer",
     )
 
     def __init__(
@@ -28,14 +28,15 @@ class Vacancy:
         requirements: str,
         employer: str,
     ):
-        self._title = self._validate_title(title)
-        self._url = self._validate_url(url)
-        self._salary_from = self._validate_salary(salary_from)
-        self._salary_to = self._validate_salary(salary_to)
-        self._currency = self._validate_currency(currency)
-        self._description = self._validate_text(description)
-        self._requirements = self._validate_text(requirements)
-        self._employer = self._validate_text(employer)
+        # Делаем все атрибуты приватными (с двумя подчеркиваниями)
+        self.__title = self._validate_title(title)
+        self.__url = self._validate_url(url)
+        self.__salary_from = self._validate_salary(salary_from)
+        self.__salary_to = self._validate_salary(salary_to)
+        self.__currency = self._validate_currency(currency)
+        self.__description = self._validate_text(description)
+        self.__requirements = self._validate_text(requirements)
+        self.__employer = self._validate_text(employer)
 
     @staticmethod
     def _validate_title(title: str) -> str:
@@ -74,84 +75,84 @@ class Vacancy:
 
     @property
     def title(self) -> str:
-        return self._title
+        return self.__title
 
     @property
     def url(self) -> str:
-        return self._url
+        return self.__url
 
     @property
     def salary_from(self) -> int:
-        return self._salary_from
+        return self.__salary_from
 
     @property
     def salary_to(self) -> int:
-        return self._salary_to
+        return self.__salary_to
 
     @property
     def currency(self) -> str:
-        return self._currency
+        return self.__currency
 
     @property
     def description(self) -> str:
-        return self._description
+        return self.__description
 
     @property
     def requirements(self) -> str:
-        return self._requirements
+        return self.__requirements
 
     @property
     def employer(self) -> str:
-        return self._employer
+        return self.__employer
 
     def get_salary_display(self) -> str:
         """Получить отформатированную строку зарплаты"""
-        if self._salary_from == 0 and self._salary_to == 0:
+        if self.__salary_from == 0 and self.__salary_to == 0:
             return "Зарплата не указана"
 
-        if self._salary_from == self._salary_to:
-            return f"{self._salary_from:,} {self._currency}".replace(",", " ")
+        if self.__salary_from == self.__salary_to:
+            return f"{self.__salary_from:,} {self.__currency}".replace(",", " ")
 
-        if self._salary_from > 0 and self._salary_to > 0:
-            return (
-                f"{self._salary_from:,} - {self._salary_to:,} {self._currency}".replace(
-                    ",", " "
-                )
+        if self.__salary_from > 0 and self.__salary_to > 0:
+            return f"{self.__salary_from:,} - {self.__salary_to:,} {self.__currency}".replace(
+                ",", " "
             )
 
-        if self._salary_from > 0:
-            return f"от {self._salary_from:,} {self._currency}".replace(",", " ")
+        if self.__salary_from > 0:
+            return f"от {self.__salary_from:,} {self.__currency}".replace(",", " ")
 
-        return f"до {self._salary_to:,} {self._currency}".replace(",", " ")
+        return f"до {self.__salary_to:,} {self.__currency}".replace(",", " ")
 
     def __str__(self) -> str:
         return (
-            f"{self._title}\n"
-            f"Компания: {self._employer}\n"
+            f"{self.__title}\n"
+            f"Компания: {self.__employer}\n"
             f"Зарплата: {self.get_salary_display()}\n"
-            f"Требования: {self._requirements[:100]}...\n"
-            f"Ссылка: {self._url}\n"
+            f"Требования: {self.__requirements[:100]}...\n"
+            f"Ссылка: {self.__url}\n"
         )
 
     def __repr__(self) -> str:
-        return f"Vacancy('{self._title}', '{self._url}')"
+        return f"Vacancy('{self.__title}', '{self.__url}')"
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Vacancy):
             return NotImplemented
         return (
-            self._title == other._title
-            and self._url == other._url
-            and self._salary_from == other._salary_from
-            and self._salary_to == other._salary_to
+            self.__title == other.__title
+            and self.__url == other.__url
+            and self.__salary_from == other.__salary_from
+            and self.__salary_to == other.__salary_to
         )
 
     def __lt__(self, other: Vacancy) -> bool:
         if not isinstance(other, Vacancy):
             return NotImplemented
         # Сравниваем по минимальной зарплате
-        self_avg = self._salary_from if self._salary_from > 0 else self._salary_to
-        other_avg = other._salary_from if other._salary_from > 0 else other._salary_to
+        self_avg = self.__salary_from if self.__salary_from > 0 else self.__salary_to
+        other_avg = (
+            other.__salary_from if other.__salary_from > 0 else other.__salary_to
+        )
         return self_avg < other_avg
 
     def __le__(self, other: Vacancy) -> bool:
@@ -166,14 +167,14 @@ class Vacancy:
     def to_dict(self) -> Dict[str, Any]:
         """Преобразовать вакансию в словарь"""
         return {
-            "title": self._title,
-            "url": self._url,
-            "salary_from": self._salary_from,
-            "salary_to": self._salary_to,
-            "currency": self._currency,
-            "description": self._description,
-            "requirements": self._requirements,
-            "employer": self._employer,
+            "title": self.__title,
+            "url": self.__url,
+            "salary_from": self.__salary_from,
+            "salary_to": self.__salary_to,
+            "currency": self.__currency,
+            "description": self.__description,
+            "requirements": self.__requirements,
+            "employer": self.__employer,
         }
 
     @classmethod
