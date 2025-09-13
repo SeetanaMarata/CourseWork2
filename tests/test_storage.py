@@ -54,3 +54,10 @@ class TestJSONSaver(unittest.TestCase):
 
         self.assertEqual(len(vacancies), 1)
         self.assertEqual(vacancies[0].title, "Test Developer")
+
+    def test_clear(self):
+        self.saver.add_vacancy(self.vacancy)
+        self.saver.clear()
+
+        vacancies = self.saver.get_vacancies()
+        self.assertEqual(len(vacancies), 0)
